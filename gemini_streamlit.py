@@ -1,13 +1,13 @@
 import os
 import requests
 import streamlit as st
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 # Load environment variables
-load_dotenv('api.env')
+#load_dotenv('api.env')
 
 # Configure API
-API_KEY = os.getenv("GEMINI_API_KEY")
+#API_KEY = os.getenv("GEMINI_API_KEY")
 BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
 
 # Streamlit page config
