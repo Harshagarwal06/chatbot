@@ -1,14 +1,11 @@
 import os
 import requests
 import streamlit as st
-#from dotenv import load_dotenv
 
-# Load environment variables
-#load_dotenv('api.env')
-
+# Correctly access the secret
+API_KEY = st.secrets["GEMINI_API_KEY"]
 
 # Configure API
-API_KEY = st.secrets["GEMINI_API_KEY"]
 BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
 
 # Streamlit page config
@@ -17,6 +14,8 @@ st.set_page_config(page_title="Gemini Chatbot", page_icon="🤖")
 # Initialize session state for chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
+    # Add a welcome message from the bot
+    st.session_state.messages.append({"role": "assistant", "content": "Hi! I'm Gemini. How can I help you today?"})
 
 def generate_response(prompt):
     """Get response from Gemini API"""
@@ -45,21 +44,24 @@ def generate_response(prompt):
 
 # Display chat messages
 for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
+    with st.chat_message(message["role"], avatar="🤖" if message["role"] == "assistant" else "👤"):
         st.markdown(message["content"])
 
-# Chat input
-if prompt := st.chat_input("Type your message..."):
+# Chat input with placeholder
+if prompt := st.chat_input("Type your message here..."):
     # Add user message to history
     st.session_state.messages.append({"role": "user", "content": prompt})
     
-    # Display user message
-    with st.chat_message("user"):
+    # Display user message with avatar
+    with st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
     
-    # Get and display bot response
-    with st.chat_message("assistant"):
+    # Display a spinner while generating the response
+    with st.spinner("Thinking..."):
         response = generate_response(prompt)
+    
+    # Display bot response with avatar
+    with st.chat_message("assistant", avatar="🤖"):
         st.markdown(response)
     
     # Add bot response to history
@@ -70,5 +72,13 @@ with st.sidebar:
     st.title("Chat Controls")
     if st.button("Clear Chat History"):
         st.session_state.messages = []
+        st.success("Chat history cleared!")
     st.markdown("---")
-    st.markdown("**Instructions:**\n- Type your message below\n- Click 'Clear Chat History' to restart")
+    st.markdown("**Instructions:**")
+    st.markdown("- Type your message in the chat box below.")
+    st.markdown("- Click 'Clear Chat History' to restart the conversation.")
+    st.markdown("- Enjoy chatting with the Gemini AI!")
+
+# Footer
+st.markdown("---")
+st.markdown("Built with ❤️ by [Harsh Agarwal]")
