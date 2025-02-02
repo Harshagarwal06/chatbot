@@ -6,6 +6,7 @@ import streamlit as st
 # Load environment variables
 #load_dotenv('api.env')
 
+API_KEY = st.secrets(GEMINI_API_KEY)
 # Configure API
 #API_KEY = os.getenv("GEMINI_API_KEY")
 BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
